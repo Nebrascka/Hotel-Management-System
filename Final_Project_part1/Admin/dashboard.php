@@ -20,7 +20,7 @@ if(!isset($_SESSION['email'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <title>Reservation</title>
   </head>
   <body>
@@ -53,7 +53,7 @@ if(!isset($_SESSION['email'])) {
             <a class="btn btn-primary btn-lg" href="./addroom.php" role="button">Add room</a>
         </div>
         <div class="my-5">
-            <canvas id="myChart"></canvas>
+            <canvas id="myChart" height="480px"></canvas>
         </div>
 
         <script>
@@ -61,11 +61,8 @@ if(!isset($_SESSION['email'])) {
                 const res = await fetch('/Hotel-Management-System/Final_Project_part1/Admin/getData.php')
                 const dataset = await res.json()
 
-                return dataset
-            }
-            getDataset().then(data => {
                 const ctx = document.getElementById('myChart');
-                const months = data.months.map(month => {
+                const months = dataset.months.map(month => {
                     const date = new Date()
                     date.setMonth(Number(month) - 1)
 
@@ -80,7 +77,7 @@ if(!isset($_SESSION['email'])) {
                         labels: months,
                         datasets: [{
                             label: 'monthly bookings',
-                            data: data.map,
+                            data: dataset.map,
                             borderWidth: 1
                         }]
                     },
@@ -104,7 +101,7 @@ if(!isset($_SESSION['email'])) {
                         }
                     }
                 });
-            })
+            }
             
         </script>
     </div>

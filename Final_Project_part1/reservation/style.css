@@ -1,20 +1,63 @@
-.card-img-top {
-    height: 12rem;
+/* ################################ */
+/*       reservation page           */
+/* ################################ */
+*{
+    /* outline: red .7px solid; */
+}
+.header {
+    background-image: url('../image/reserve-bg.jpg');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 1rem;
+}
+.header form {
+    display: grid;
+    place-items: center;
+    height: 30vh;
+}
+.form-cont {
+    display: flex;
+    gap: .6rem;
+    align-items:end;
+    background-color: #fff;
+    padding: .6rem;
+    border-radius: 3px;
+}
+.btn{
+    height: 2.4rem;
+}
+
+.rooms{
+    padding: 1rem;
+}
+.rooms img{
+    height: 100%;
+    width: 100%;
+
     object-fit: cover;
     object-position: center;
 }
-.col-sm {
-    margin-bottom: 1rem;
+.rooms-cont {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 1148px;
+    margin: 0 auto;
 }
-.container {
-    max-width: 968px;
+
+.room * {
+    margin: 0 !important;
+    padding: 0 !important;
 }
-.form inline .form-control {
+.room-ill {
+    height: 14rem;
+}
+.details {
     display: flex;
-    flex-direction: column;
-    gap: .8rem;
+    justify-content: space-between;
 }
-.add-form {
-    max-width: 28rem;
-    margin: 2rem auto;
+.name {
+    font-size: larger;
+    font-weight: bold;
 }

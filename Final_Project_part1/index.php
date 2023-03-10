@@ -1,3 +1,15 @@
+<?php
+if($_SERVER["REQUEST_METHOD"] === "POST") {
+
+  $adults = (int)$_POST["adults"];
+  $children = (int)$_POST["children"];
+  $cp = $adults + $children;
+
+  header("Location: ./reservation/?cp=" . $cp);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -103,28 +115,30 @@
     }
   </script>
   <section class="book">
-    <div class="container flex">
-      <div class="input grid">
-        <div class="box">
-          <label>Check-in:</label>
-          <input type="date" placeholder="Check-in-Date">
+    <div class="container">
+      <form method="post" class="flex">
+        <div class="input grid">
+          <div class="box">
+            <label>Check-in:</label>
+            <input type="date" placeholder="Check-in-Date">
+          </div>
+          <div class="box">
+            <label>Check-out:</label>
+            <input type="date" placeholder="Check-out-Date">
+          </div>
+          <div class="box">
+            <label>Adults:</label> <br>
+            <input type="number" placeholder="0" name="adults">
+          </div>
+          <div class="box">
+            <label>Children:</label> <br>
+            <input type="number" placeholder="0" name="children">
+          </div>
         </div>
-        <div class="box">
-          <label>Check-out:</label>
-          <input type="date" placeholder="Check-out-Date">
-        </div>
-        <div class="box">
-          <label>Adults:</label> <br>
-          <input type="number" placeholder="0">
-        </div>
-        <div class="box">
-          <label>Children:</label> <br>
-          <input type="number" placeholder="0">
-        </div>
-      </div>
-      <div class="search">
-        <input type="submit" value="SEARCH">
-      </div>
+        <a class="search" style="text-decoration: none;">
+          <input type="submit" value="SEARCH">
+        </a>
+      </form>
     </div>
   </section>
   <section class="about top" id="about">

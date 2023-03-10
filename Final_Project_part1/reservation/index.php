@@ -7,6 +7,14 @@ if(!isset($_SESSION['id'])) {
 ?>
 
 <?php require_once('../db/db.php') ?>
+
+<?php 
+    $cp = 0;
+    if(isset($_GET['cp'])) { 
+        $cp = $_GET["cp"];
+    } 
+?>
+
 <?php
 function addReq($creator, $checkin, $checkout, $adults, $children, $suite) {
     $pdo = establishCONN();
@@ -31,30 +39,42 @@ function getCategories(){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getRooms() {
+function getRooms($capacity) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state");
+    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.capacity >= :cp");
     $stmt->bindValue(":state", false);
+    $stmt->bindValue(":cp", $capacity);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getRoomVar($category, $capacity) {
+    $pdo = establishCONN();
+
+    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.category = :ct AND rooms.capacity >= :cp");
+    $stmt->bindValue(":state", false);
+    $stmt->bindValue(":ct", $category);
+    $stmt->bindValue(":cp", $capacity);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $creator = $_SESSION['id'];
-    $in = $_POST['in'];
-    $out = $_POST['out'];
+
     $adults = $_POST['adults'];
     $children = $_POST['children'];
     $suite = $_POST['suite'];
 
-    addReq($creator, $in, $out, $adults, $children, $suite);
-    // header('Location: ./dashboard.php');
+    $rooms = getRoomVar($suite, (int)$adults + (int)$children);
+} else {
+    $rooms = getRooms($cp);
 }
 
-
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -70,14 +90,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reservation</title>
   </head>
   <body>
-    <?php 
-        //echo "<pre>" . var_dump(getRooms()) ."</pre>";
-    ?>
     <section class="header">
         <form class="add-form" method="POST" enctype="multipart/form-data">
             <div class="form-cont">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Category</label>
+                    <label for="exampleInputEmail1">Category:</label>
                     <?php $catgs = getCategories() ?>
                     <select class="form-control" name="suite" id="">
                         <?php foreach ($catgs as $key => $catg) { ?>
@@ -86,19 +103,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Checkin date</label>
+                    <label for="exampleInputEmail1">Checkin date:</label>
                     <input type="date" class="form-control" name="in" aria-describedby="emailHelp">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Checkout date</label>
+                    <label for="exampleInputEmail1">Checkout date:</label>
                     <input type="date" class="form-control" name="out" aria-describedby="emailHelp">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Adults</label>
+                    <label for="exampleInputEmail1">Adults:</label>
                     <input type="number" class="form-control" name="adults" aria-describedby="emailHelp" placeholder="number of adults">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Children</label>
+                    <label for="exampleInputEmail1">Children:</label>
                     <input type="number" class="form-control" name="children" aria-describedby="emailHelp" placeholder="number of children">
                 </div>
                 <div class="form-group"><button type="submit" class="btn btn-secondary">Search room</button></div>
@@ -106,7 +123,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
     <section class="rooms">
-        <?php $rooms =  getRooms()?>
         <div class="rooms-cont">
             <?php foreach($rooms as $room) {?>
             <div class="room">
@@ -120,7 +136,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="price">
                     <p class="price"><?php echo $room["price"] ?> per night.</p>
                 </div>
-                <a href="#" class="btn btn-block btn-primary">Book room</a>
+                <a href="./book.php?rid=<?php echo $room["id"]; ?>" class="btn btn-block btn-primary">Reserve room</a>
             </div>
             <?php } ?>
         </div>

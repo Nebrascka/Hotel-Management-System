@@ -1,76 +1,61 @@
-<?php
-session_start();
-
-if(!isset($_SESSION['id'])) {
-    header('location: ./login.php');
-}
-?>
-
 <?php require_once('../db/db.php') ?>
-
-<?php 
-    $cp = 0;
-    if(isset($_GET['cp'])) { 
-        $cp = $_GET["cp"];
-    } 
-?>
-
 <?php
-function addReq($creator, $checkin, $checkout, $adults, $children, $suite) {
-    $pdo = establishCONN();
+    function getPrice($id) {
+        $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("INSERT INTO applications (created_by, checkin, checkout, adults, children, suite) VALUES (:creator, :checkin, :checkout, :adults, :children, :suite)" );
-    $stmt->bindValue(':creator', $creator);
-    $stmt->bindValue(':checkin', $checkin);
-    $stmt->bindValue(':checkout', $checkout);
-    $stmt->bindValue(':adults', $adults);
-    $stmt->bindValue(':children', $children);
-    $stmt->bindValue(':suite', $suite);
+        $stmt = $pdo->prepare("SELECT price from categories WHERE id = :id" );
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $res[0]["price"];
+    }
 
-    $stmt->execute();
-}
+    function addReq($creator, $checkin, $checkout, $adults, $children, $suite, $rs, $total) {
+        $pdo = establishCONN();
 
-function getCategories(){
-    $pdo = establishCONN();
+        $stmt = $pdo->prepare("INSERT INTO applications (created_by, checkin, checkout, adults, children, suite, roomSelected, totalPrice) VALUES (:creator, :checkin, :checkout, :adults, :children, :suite, :rs, :total)" );
+        $stmt->bindValue(':creator', $creator);
+        $stmt->bindValue(':checkin', $checkin);
+        $stmt->bindValue(':checkout', $checkout);
+        $stmt->bindValue(':adults', $adults);
+        $stmt->bindValue(':children', $children);
+        $stmt->bindValue(':suite', $suite);
+        $stmt->bindValue(':rs', $rs);
+        $stmt->bindValue(':total', $total);
 
-    $stmt = $pdo->prepare("SELECT * FROM categories");
-    $stmt->execute();
+        $stmt->execute();
+    }
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    session_start();
 
-function getRoom($capacity) {
-    $pdo = establishCONN();
+    $_SESSION["HM_rcheckin"] = $_POST["checkin"];
+    $_SESSION["HM_rcheckout"] = $_POST["checkout"];
+    $_SESSION["HM_gfname"] = $_POST["fname"];
+    $_SESSION["HM_glname"] = $_POST["lname"];
+    $_SESSION["HM_gemail"] = $_POST["email"];
+    $_SESSION["HM_roomselect"] = $_GET["rid"];
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.capacity >= :cp");
-    $stmt->bindValue(":state", false);
-    $stmt->bindValue(":cp", $capacity);
-    $stmt->execute();
+    $date1 = new DateTime($_POST["checkin"]);
+    $date2 = new DateTime($_POST["checkout"]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    // this calculates the diff between two dates, which is the number of nights
+    $numberOfNights = $date2->diff($date1)->format("%a");
+    $total = $numberOfNights * getPrice($_SESSION["HM_categoryId"]);
+    //var_dump(getPrice($_SESSION["HM_categoryId"]));
 
-function getRoomVar($category, $capacity) {
-    $pdo = establishCONN();
+    /*var_dump($_POST["adults"]);
+    var_dump($_POST["children"]);
+    exit;*/
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.category = :ct AND rooms.capacity >= :cp");
-    $stmt->bindValue(":state", false);
-    $stmt->bindValue(":ct", $category);
-    $stmt->bindValue(":cp", $capacity);
-    $stmt->execute();
+    if($_SERVER["REQUEST_METHOD"] === "POST") {
+        if(!isset($_SESSION['HM_uid'])) {
+            header('location: ./login.php');
+            $_SESSION["HM_next"] = 'book.php?rid=' . $_SESSION["HM_roomselect"];
+        } else {
+            addReq($_SESSION["HM_uid"], $_SESSION["HM_rcheckin"], $_SESSION["HM_rcheckout"], (int)$_POST["adults"], (int)$_POST["children"], $_SESSION["HM_categoryId"], $_SESSION["HM_roomselect"], $total);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $adults = $_POST['adults'];
-    $children = $_POST['children'];
-    $suite = $_POST['suite'];
-
-    $rooms = getRoomVar($suite, (int)$adults + (int)$children);
-} else {
-    $rooms = getRooms($cp);
-}
+            header('Location: dashboard.php?uid='.$_SESSION["HM_uid"]);
+        }
+    }
 
 ?>

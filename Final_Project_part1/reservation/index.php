@@ -1,11 +1,3 @@
-<?php
-session_start();
-
-if(!isset($_SESSION['id'])) {
-    header('location: ./login.php');
-}
-?>
-
 <?php require_once('../db/db.php') ?>
 
 <?php 
@@ -42,7 +34,7 @@ function getCategories(){
 function getRooms($capacity) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.capacity >= :cp");
+    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isReserved = :state AND rooms.capacity >= :cp");
     $stmt->bindValue(":state", false);
     $stmt->bindValue(":cp", $capacity);
     $stmt->execute();

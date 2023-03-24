@@ -24,10 +24,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $loged = login($email, $pwd);
     if($loged['isLogged']) {
         session_start();
-        $_SESSION['id'] = $loged['userObject']['id'];
-        $_SESSION['email'] = $loged['userObject']['email'];
+        $_SESSION['HM_uid'] = $loged['userObject']['id'];
+        $_SESSION['HM_uemail'] = $loged['userObject']['email'];
+        $_SESSION['HM_ufname'] = $loged['userObject']['fname'];
+        $_SESSION['HM_ulname'] = $loged['userObject']['lname'];
+
+        $id = $_SESSION["HM_uid"];
+
+        if(isset($_SESSION["HM_next"])) {
+            header('Location: '.$_SESSION["HM_next"]);
+        } else {
+            header('Location: dashboard.php?uid='.$id);
+        }
     }
-    header('Location: ./index.php');
 }
 
 
@@ -48,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>login</title>
   </head>
   <body>
-        <form class="add-form" method="POST" enctype="multipart/form-data">
+        <form class="add-form" method="POST" enctype="multipart/form-data" style="max-width: 468px; margin: 0 auto;">
             <h1 style="text-align: center">Login</h1>
             <hr>
             <div class="form-group">

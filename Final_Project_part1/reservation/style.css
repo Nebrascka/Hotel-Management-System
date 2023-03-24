@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Karla:wght@300;400;600&family=Poppins:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap');
 /* ################################ */
 /*       reservation page           */
 /* ################################ */
 *{
+    margin: 0;
+    padding: 0;
     /* outline: red .7px solid; */
+}
+body {
+    font-family: 'Karla', sans-serif;
 }
 .header {
     background-image: url('../image/reserve-bg.jpg');
@@ -104,3 +110,51 @@
 .book-form {
     padding-top: 1rem;
 }
+
+/* dashboard */
+.dash-nav {
+    border-bottom: #fff .7px solid;
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    padding: 1rem 0;
+}
+.dash-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+}
+#dashboard {
+    display: flex;
+    height: 100vh;
+}
+.aside {
+    width: 16%;
+    padding: 1.4rem 0;
+    background-color: rgb(3, 7, 22);
+    color: #fff;
+}
+.aside h3 {
+    padding: 0 2rem;
+}
+.aside ul {
+    border-top: #e0d8d8 .6px solid;
+}
+.side-nav-item{
+    padding: .4rem 2.4rem;
+}
+.side-nav-item:hover {
+    background-color: #ccdef8;
+}
+main {
+    width: 90%;
+    padding: 0 1.4rem;
+    overflow-y: auto;
+}
+.jumbotron {
+    max-width: 968px;
+}
+

@@ -2,24 +2,12 @@
 
 session_start();
 if(!isset($_SESSION['id'])) {
-    header('location: ./login.php');
+    header('location: ../login.php');
 }
 ?>
 
-<?php require_once('../db/db.php') ?>
+<?php require_once('../../db/db.php') ?>
 <?php 
-
-function addRoom($num, $category, $cap, $img) {
-    $pdo = establishCONN();
-
-    $stmt = $pdo->prepare("INSERT INTO rooms (number, category, capacity, image) VALUES (:num, :catg, :cap, :img)" );
-    $stmt->bindValue(':num', $num);
-    $stmt->bindValue(':catg', $category);
-    $stmt->bindValue(':cap', $cap);
-    $stmt->bindValue(':img', $img);
-
-    $stmt->execute();
-}
 
 function getCategories(){
     $pdo = establishCONN();
@@ -30,33 +18,39 @@ function getCategories(){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function updateRoom($name,$num, $category, $cap, $id) {
+    $pdo = establishCONN();
+
+    $stmt = $pdo->prepare("UPDATE rooms SET name = :name, number = :num, category = :catg, capacity = :cap WHERE roomid = :id" );
+    $stmt->bindValue(':name', $name);
+    $stmt->bindValue(':num', $num);
+    $stmt->bindValue(':catg', $category);
+    $stmt->bindValue(':cap', $cap);
+    $stmt->bindValue(':id', $id);
+
+    $stmt->execute();
+}
+
+function getRoom($id){
+    $pdo = establishCONN();
+
+    $stmt = $pdo->prepare("SELECT * FROM rooms WHERE roomid = :id");
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
     $num = $_POST['num'];
     $category = $_POST['category'];
     $cap = $_POST['cap']; 
 
-    // handle image upload   
-    $valid_ext = ['jpg', 'jpeg', 'png'];
-    $file = $_FILES['image'];
-
-    $fileName = $file['name'];
-    $fileTmpDes = $file['tmp_name'];
-    $fileError = $file['error'];
-
-    $fileExt = explode('.', $fileName);
-    $actualFileExt = strtolower(end($fileExt));
-
-    $fileNewName = uniqid('', true) . '.' . $actualFileExt;
-    $destination = "../img/" . $fileNewName;
-    $poster = $destination;
-    move_uploaded_file($fileTmpDes, $destination); 
-
-    $file_url = "/img/" . $fileNewName;
-
     // add to database
-    addRoom($num, $category, $cap, $file_url);
+    updateRoom($num, $category, $cap, $_GET["r_id"]);
 
-    // header('Location: ./dashboard.php');
+    header('Location: ./index.php');
 }
 
 ?>
@@ -70,7 +64,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 
     <title>Reservation</title>
   </head>
@@ -85,7 +79,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="./addroom.php">Rooms <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="./index.php">Rooms <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./reservations.php">Reservations</a>
@@ -94,7 +88,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
     <div class="container">
+        <?php $room = getRoom($_GET["r_id"]); ?>
         <form class="add-form" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Room name</label>
+                <input type="text" class="form-control" name="name" aria-describedby="emailHelp" value="<?php echo $room["name"] ?>">
+            </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group">
@@ -110,19 +109,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Room number</label>
-                        <input type="text" class="form-control" name="num" aria-describedby="emailHelp">
+                        <input type="text" class="form-control" name="num" aria-describedby="emailHelp" value="<?php echo $room["number"] ?>">
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Capacity</label>
-                <input type="number" class="form-control" name="cap" aria-describedby="emailHelp">
+                <input type="number" class="form-control" name="cap" aria-describedby="emailHelp" min=1 value="<?php echo $room["capacity"] ?>">
             </div>
-            <div class="form-group">
-                <label for="exampleFormControlFile1">Room picture</label>
-                <input type="file" class="form-control-file" name="image">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Add room</button>
+            <button type="submit" class="btn btn-primary btn-block">Update room</button>
         </form>
     </div>
 

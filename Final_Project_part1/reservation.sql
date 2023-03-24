@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2023 at 08:38 PM
+-- Generation Time: Mar 24, 2023 at 11:33 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -55,17 +55,37 @@ CREATE TABLE `applications` (
   `children` int(11) NOT NULL DEFAULT 0,
   `created_on` date NOT NULL DEFAULT current_timestamp(),
   `suite` int(11) NOT NULL,
-  `isApproved` tinyint(1) NOT NULL DEFAULT 0
+  `roomSelected` int(11) DEFAULT NULL,
+  `totalPrice` int(11) NOT NULL,
+  `isApproved` tinyint(1) NOT NULL DEFAULT 0,
+  `paymentStatus` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `applications`
 --
 
-INSERT INTO `applications` (`id`, `created_by`, `checkin`, `checkout`, `adults`, `children`, `created_on`, `suite`, `isApproved`) VALUES
-(16, 5, '2023-03-04', '2023-03-06', 4, 2, '2023-02-02', 5, 0),
-(17, 6, '2023-03-04', '2023-03-07', 2, 7, '2023-03-03', 6, 1),
-(18, 7, '2023-03-13', '2023-03-24', 18, 6, '2023-03-03', 7, 0);
+INSERT INTO `applications` (`id`, `created_by`, `checkin`, `checkout`, `adults`, `children`, `created_on`, `suite`, `roomSelected`, `totalPrice`, `isApproved`, `paymentStatus`) VALUES
+(39, 2, '2023-03-25', '2023-03-26', 1, 0, '2023-03-24', 5, 16, 25000, 0, 0);
+
+--
+-- Triggers `applications`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_booking` AFTER UPDATE ON `applications` FOR EACH ROW BEGIN
+  IF NEW.paymentStatus = true AND OLD.paymentStatus = false THEN
+    INSERT INTO bookings (application_id, room_id) VALUES (NEW.id, NEW.roomSelected);
+    UPDATE rooms SET isBooked = true WHERE id = NEW.roomSelected;
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_rooms_isReserved` AFTER INSERT ON `applications` FOR EACH ROW BEGIN
+  UPDATE rooms SET isReserved = true WHERE id = NEW.roomSelected;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -78,13 +98,6 @@ CREATE TABLE `bookings` (
   `application_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `bookings`
---
-
-INSERT INTO `bookings` (`booking_id`, `application_id`, `room_id`) VALUES
-(4, 17, 19);
 
 -- --------------------------------------------------------
 
@@ -116,11 +129,13 @@ INSERT INTO `categories` (`id`, `description`, `label`, `capacity`, `price`) VAL
 --
 
 CREATE TABLE `rooms` (
-  `id` int(11) NOT NULL,
+  `roomid` int(11) NOT NULL,
+  `name` varchar(55) DEFAULT NULL,
   `number` varchar(55) NOT NULL,
   `category` int(11) NOT NULL,
   `capacity` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
+  `isReserved` tinyint(1) NOT NULL DEFAULT 0,
   `isBooked` tinyint(1) NOT NULL DEFAULT 0,
   `created_on` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -129,16 +144,14 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `number`, `category`, `capacity`, `image`, `isBooked`, `created_on`) VALUES
-(14, '21', 5, 3, '/img/63ee90188a9ec5.72952604.jpg', 0, '2023-02-16'),
-(16, '132', 5, 12, '/img/6401fb4dc3b736.50213481.jpg', 0, '2023-03-03'),
-(17, '133', 5, 12, '/img/6401fbb1225cf4.01027358.jpg', 0, '2023-03-03'),
-(18, '231', 6, 8, '/img/6401fbe49f4951.00713921.jpg', 0, '2023-03-03'),
-(19, '233', 6, 12, '/img/6401fbfd2b4961.73389606.jpg', 1, '2023-03-03'),
-(20, '254', 6, 6, '/img/6401fc18636269.77488336.jpg', 0, '2023-03-03'),
-(21, '015', 7, 24, '/img/6401fe19e3ea46.16076036.jpg', 0, '2023-03-03'),
-(22, '018', 7, 18, '/img/6401fe30363ba6.49775317.jpg', 0, '2023-03-03'),
-(23, '022', 7, 20, '/img/6401fe45d4c405.47542184.jpg', 0, '2023-03-03');
+INSERT INTO `rooms` (`roomid`, `name`, `number`, `category`, `capacity`, `image`, `isReserved`, `isBooked`, `created_on`) VALUES
+(18, 'Boasty shark', '11', 5, 1, '/img/6401fbe49f4951.00713921.jpg', 0, 0, '2023-03-03'),
+(19, 'Green Leaf', '12', 5, 5, '/img/6401fbfd2b4961.73389606.jpg', 0, 0, '2023-03-03'),
+(20, 'Eighty sites', '13', 7, 4, '/img/6401fc18636269.77488336.jpg', 0, 0, '2023-03-03'),
+(21, 'Reef village', '14', 5, 7, '/img/6401fe19e3ea46.16076036.jpg', 0, 0, '2023-03-03'),
+(22, 'Tropical villa', '15', 6, 9, '/img/6401fe30363ba6.49775317.jpg', 0, 0, '2023-03-03'),
+(23, 'Light view', '17', 7, 3, '/img/6401fe45d4c405.47542184.jpg', 0, 0, '2023-03-03'),
+(26, 'Beach front', '19', 7, 5, '/img/641d7c07941960.94938233.jpg', 0, 0, '2023-03-24');
 
 -- --------------------------------------------------------
 
@@ -185,7 +198,8 @@ ALTER TABLE `admin`
 ALTER TABLE `applications`
   ADD PRIMARY KEY (`id`),
   ADD KEY `created_by` (`created_by`),
-  ADD KEY `suite` (`suite`);
+  ADD KEY `suite` (`suite`),
+  ADD KEY `roomSelected` (`roomSelected`);
 
 --
 -- Indexes for table `bookings`
@@ -205,7 +219,7 @@ ALTER TABLE `categories`
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`roomid`),
   ADD KEY `category` (`category`);
 
 --
@@ -228,13 +242,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -246,7 +260,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `roomid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -269,7 +283,7 @@ ALTER TABLE `applications`
 -- Constraints for table `bookings`
 --
 ALTER TABLE `bookings`
-  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`roomid`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

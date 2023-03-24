@@ -44,7 +44,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>register</title>
   </head>
   <body>
-        <form class="add-form" method="POST" enctype="multipart/form-data">
+        <form class="add-form" method="POST" enctype="multipart/form-data" style="max-width: 648px; margin: 0 auto;"> 
             <h1 style="text-align: center">Register with us</h1>
             <hr>
             <div class="row">

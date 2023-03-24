@@ -8,20 +8,6 @@
 ?>
 
 <?php
-function addReq($creator, $checkin, $checkout, $adults, $children, $suite) {
-    $pdo = establishCONN();
-
-    $stmt = $pdo->prepare("INSERT INTO applications (created_by, checkin, checkout, adults, children, suite) VALUES (:creator, :checkin, :checkout, :adults, :children, :suite)" );
-    $stmt->bindValue(':creator', $creator);
-    $stmt->bindValue(':checkin', $checkin);
-    $stmt->bindValue(':checkout', $checkout);
-    $stmt->bindValue(':adults', $adults);
-    $stmt->bindValue(':children', $children);
-    $stmt->bindValue(':suite', $suite);
-
-    $stmt->execute();
-}
-
 function getCategories(){
     $pdo = establishCONN();
 
@@ -34,7 +20,7 @@ function getCategories(){
 function getRooms($capacity) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isReserved = :state AND rooms.capacity >= :cp");
+    $stmt = $pdo->prepare("SELECT roomid, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isReserved = :state AND rooms.capacity >= :cp");
     $stmt->bindValue(":state", false);
     $stmt->bindValue(":cp", $capacity);
     $stmt->execute();
@@ -45,7 +31,7 @@ function getRooms($capacity) {
 function getRoomVar($category, $capacity) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.category = :ct AND rooms.capacity >= :cp");
+    $stmt = $pdo->prepare("SELECT roomid, rooms.name, rooms.image, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.isBooked = :state AND rooms.category = :ct AND rooms.capacity >= :cp");
     $stmt->bindValue(":state", false);
     $stmt->bindValue(":ct", $category);
     $stmt->bindValue(":cp", $capacity);
@@ -128,7 +114,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="price">
                     <p class="price"><?php echo $room["price"] ?> per night.</p>
                 </div>
-                <a href="./book.php?rid=<?php echo $room["id"]; ?>" class="btn btn-block btn-primary">Reserve room</a>
+                <a href="./book.php?rid=<?php echo $room["roomid"]; ?>" class="btn btn-block btn-primary">Reserve room</a>
             </div>
             <?php } ?>
         </div>

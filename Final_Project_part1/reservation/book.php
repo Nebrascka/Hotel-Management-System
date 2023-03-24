@@ -4,7 +4,7 @@
   function getRoom($id) {
       $pdo = establishCONN();
 
-      $stmt = $pdo->prepare("SELECT rooms.id, rooms.name, rooms.image, categories.id AS cid, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE rooms.id = :id");
+      $stmt = $pdo->prepare("SELECT roomid, rooms.name, rooms.image, categories.id AS cid, categories.description AS category, categories.price FROM rooms LEFT JOIN categories ON rooms.category = categories.id WHERE roomid = :id");
       $stmt->bindValue(":id", $id);
       $stmt->execute();
 
@@ -43,7 +43,7 @@
               <p id="suite-price"><?php echo $room["price"] ?> per night</p>
               <hr>
             </div>
-            <form action="handleBooking.php?rid=<?php echo $room["id"] ?>" class="book-form" method="POST">
+            <form action="handleBooking.php?rid=<?php echo $room["roomid"] ?>" class="book-form" method="POST">
             <p><small><b>Reservation details:</b></small></p>
               <div class="row">
                   <div class="col">

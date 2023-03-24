@@ -3,7 +3,7 @@
     function getPrice($id) {
         $pdo = establishCONN();
 
-        $stmt = $pdo->prepare("SELECT price from categories WHERE id = :id" );
+        $stmt = $pdo->prepare("SELECT price FROM categories WHERE categories.`id` = :id" );
         $stmt->bindValue(':id', $id);
         $stmt->execute();
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -13,7 +13,7 @@
     function addReq($creator, $checkin, $checkout, $adults, $children, $suite, $rs, $total) {
         $pdo = establishCONN();
 
-        $stmt = $pdo->prepare("INSERT INTO applications (created_by, checkin, checkout, adults, children, suite, roomSelected, totalPrice) VALUES (:creator, :checkin, :checkout, :adults, :children, :suite, :rs, :total)" );
+        $stmt = $pdo->prepare("INSERT INTO applications (created_by, checkin, checkout, adults, children, suite, roomSelected, totalPrice) VALUES (:creator, :checkin, :checkout, :adults, :children, :suite, :rs, :total)");
         $stmt->bindValue(':creator', $creator);
         $stmt->bindValue(':checkin', $checkin);
         $stmt->bindValue(':checkout', $checkout);
@@ -25,6 +25,7 @@
 
         $stmt->execute();
     }
+
 
     session_start();
 
@@ -41,19 +42,22 @@
     // this calculates the diff between two dates, which is the number of nights
     $numberOfNights = $date2->diff($date1)->format("%a");
     $total = $numberOfNights * getPrice($_SESSION["HM_categoryId"]);
-    //var_dump(getPrice($_SESSION["HM_categoryId"]));
-
-    /*var_dump($_POST["adults"]);
-    var_dump($_POST["children"]);
-    exit;*/
 
     if($_SERVER["REQUEST_METHOD"] === "POST") {
+        
+        $creator = $_SESSION["HM_uid"];
+        $checkin = $_SESSION["HM_rcheckin"];
+        $checkout = $_SESSION["HM_rcheckout"];
+        $children = (int)$_POST["children"];
+        $adults = (int)$_POST["adults"];
+        $category = $_SESSION["HM_categoryId"];
+        $room = $_SESSION["HM_roomselect"];
+
         if(!isset($_SESSION['HM_uid'])) {
             header('location: ./login.php');
             $_SESSION["HM_next"] = 'book.php?rid=' . $_SESSION["HM_roomselect"];
         } else {
-            addReq($_SESSION["HM_uid"], $_SESSION["HM_rcheckin"], $_SESSION["HM_rcheckout"], (int)$_POST["adults"], (int)$_POST["children"], $_SESSION["HM_categoryId"], $_SESSION["HM_roomselect"], $total);
-
+            addReq($creator, $checkin, $checkout, $adults, $children, $category, $room, $total);
             header('Location: dashboard.php?uid='.$_SESSION["HM_uid"]);
         }
     }

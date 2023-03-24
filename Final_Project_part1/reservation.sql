@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2023 at 11:33 AM
+-- Generation Time: Mar 24, 2023 at 10:14 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -66,7 +66,9 @@ CREATE TABLE `applications` (
 --
 
 INSERT INTO `applications` (`id`, `created_by`, `checkin`, `checkout`, `adults`, `children`, `created_on`, `suite`, `roomSelected`, `totalPrice`, `isApproved`, `paymentStatus`) VALUES
-(39, 2, '2023-03-25', '2023-03-26', 1, 0, '2023-03-24', 5, 16, 25000, 0, 0);
+(39, 2, '2023-03-25', '2023-03-26', 1, 0, '2023-03-24', 5, 16, 25000, 0, 0),
+(67, 7, '2023-03-24', '2023-03-25', 1, 0, '2023-03-24', 7, 20, 29000, 0, 0),
+(68, 7, '2023-03-27', '2023-04-06', 1, 8, '2023-03-25', 5, 21, 250000, 0, 0);
 
 --
 -- Triggers `applications`
@@ -82,7 +84,7 @@ $$
 DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `update_rooms_isReserved` AFTER INSERT ON `applications` FOR EACH ROW BEGIN
-  UPDATE rooms SET isReserved = true WHERE id = NEW.roomSelected;
+  UPDATE rooms SET isReserved = true WHERE roomid = NEW.roomSelected;
 END
 $$
 DELIMITER ;
@@ -147,11 +149,10 @@ CREATE TABLE `rooms` (
 INSERT INTO `rooms` (`roomid`, `name`, `number`, `category`, `capacity`, `image`, `isReserved`, `isBooked`, `created_on`) VALUES
 (18, 'Boasty shark', '11', 5, 1, '/img/6401fbe49f4951.00713921.jpg', 0, 0, '2023-03-03'),
 (19, 'Green Leaf', '12', 5, 5, '/img/6401fbfd2b4961.73389606.jpg', 0, 0, '2023-03-03'),
-(20, 'Eighty sites', '13', 7, 4, '/img/6401fc18636269.77488336.jpg', 0, 0, '2023-03-03'),
-(21, 'Reef village', '14', 5, 7, '/img/6401fe19e3ea46.16076036.jpg', 0, 0, '2023-03-03'),
+(20, 'Eighty sites', '13', 7, 4, '/img/6401fc18636269.77488336.jpg', 1, 0, '2023-03-03'),
+(21, 'Reef village', '14', 5, 7, '/img/6401fe19e3ea46.16076036.jpg', 1, 0, '2023-03-03'),
 (22, 'Tropical villa', '15', 6, 9, '/img/6401fe30363ba6.49775317.jpg', 0, 0, '2023-03-03'),
-(23, 'Light view', '17', 7, 3, '/img/6401fe45d4c405.47542184.jpg', 0, 0, '2023-03-03'),
-(26, 'Beach front', '19', 7, 5, '/img/641d7c07941960.94938233.jpg', 0, 0, '2023-03-24');
+(23, 'Light view', '17', 7, 3, '/img/6401fe45d4c405.47542184.jpg', 0, 0, '2023-03-03');
 
 -- --------------------------------------------------------
 
@@ -242,7 +243,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `bookings`

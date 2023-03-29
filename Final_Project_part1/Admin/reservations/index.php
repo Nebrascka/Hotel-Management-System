@@ -75,6 +75,7 @@ if(!isset($_SESSION['email'])) {
         </div>
     </nav>
     <div class="container">
+        <button class="btn btn-success my-3" onClick="window.print()">Generate report</button>
         <table class="table custom-table my-5">
            <thead>
               <tr>

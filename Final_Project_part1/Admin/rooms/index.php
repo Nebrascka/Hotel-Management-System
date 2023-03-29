@@ -63,6 +63,7 @@ if(!isset($_SESSION['email'])) {
     </nav>
     <div class="container">
          <a href="../rooms/addroom.php" class="btn btn-primary my-5">Create new room</a>
+         <button class="btn btn-success" onClick="window.print()">Generate report</button>
         <table class="table custom-table">
            <thead>
               <tr>

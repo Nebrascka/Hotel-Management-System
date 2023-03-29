@@ -27,11 +27,11 @@ if(!isset($_SESSION['email'])) {
 
     }
 
-    function getRes(){
+    function getApproved(){
         $pdo = establishCONN();
 
         $stmt = $pdo->prepare("SELECT applications.id, applications.created_by, applications.suite, applications.checkin, applications.checkout, applications.adults, applications.children, applications.totalPrice, applications.roomSelected, applications.isApproved, applications.paymentStatus, categories.description, categories.price, users.fname, users.lname FROM applications LEFT JOIN categories ON applications.suite = categories.id LEFT JOIN users ON applications.created_by = users.id WHERE applications.isApproved = :state");
-        $stmt->bindValue(':state', false);
+        $stmt->bindValue(':state', true);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,8 +75,9 @@ if(!isset($_SESSION['email'])) {
         </div>
     </nav>
     <div class="container">
-        <a href="./approved.php" class="btn btn-primary my-3">View approved Applications</a>
-        <table class="table custom-table my-5">
+         <h1 class="my-3">Approved Applications</h1>
+        <button class="btn btn-success my-3" onClick="window.print()">Generate report</button>
+        <table class="table custom-table my-3">
            <thead>
               <tr>
                  <th scope="col">
@@ -92,11 +93,10 @@ if(!isset($_SESSION['email'])) {
                  <th scope="col">Price</th>
                  <th scope="col">Approval</th>
                  <th scope="col">Payment status</th>
-                 <th scope="col">Action</th>
               </tr>
            </thead>
            <tbody>
-              <?php foreach($res = getRes() as $r) {?>
+              <?php foreach($res = getApproved() as $r) {?>
               <tr scope="row">
                  <th scope="row">
                     <label class="control control--checkbox">
@@ -123,12 +123,6 @@ if(!isset($_SESSION['email'])) {
                  <td>Kshs <?php echo $total ?></td>
                  <td><?php if($r["isApproved"]) {echo "Approved";} else {echo "Received";} ?></td>
                  <td style="font-weight: bolder;"><?php if($r["paymentStatus"]) {echo "Paid";} else {echo "Pending";} ?></td>
-                 <td>
-                    <form action="./approve.php?apl_id=<?php echo $r["id"] ?>" method="POST">
-                        <button class="btn btn-primary btn-sm">Approve</button>
-                        <button class="btn btn-secondary btn-sm">Delete</button>
-                    </form>
-                 </td>
               </tr>
               <tr class="spacer"><td colspan="100"></td></tr>
               <?php } ?>

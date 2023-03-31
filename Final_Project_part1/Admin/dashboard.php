@@ -22,6 +22,56 @@ if(!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <title>Reservation</title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Month', 'Approved', 'Unapproved'],
+          ['Jan',  1,      5],
+          ['Feb',  0,      8],
+          ['Mar',  3,       4],
+          ['Apr',  2,      6]
+        ]);
+
+        var options = {
+          title: 'Rate of Booking',
+          curveType: 'line',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Month', 'Total sales'],
+          ['Jan', 109000],
+          ['Feb', 123222],
+          ['Mar',  250000],
+          ['Apr', 101000]
+        ]);
+
+        var options = {
+          title: 'Earnings',
+          curveType: 'line',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('sales_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -45,65 +95,17 @@ if(!isset($_SESSION['email'])) {
             </div>
         </div>
     </nav>
-    <div class="container" style="display: flex; gap: 1rem;">
+    <div class="container">
         <div class="jumbotron my-5">
             <h1 class="display-4">Dashboard</h1>
             <hr class="my-4">
             <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
             <a class="btn btn-primary btn-lg" href="./addroom.php" role="button">Add room</a>
         </div>
-        <div class="my-5" onload="getDataset()">
-            <canvas id="myChart" height="480px" style="border: #000 .7px solid;"></canvas>
+        <div class="my-5" onload="getDataset()" style="display: flex; gap: 1rem;" >
+            <div id="curve_chart" style="width: 600px; height: 200px"></div>
+            <div id="sales_chart" style="width: 600px; height: 200px"></div>
         </div>
-
-        <script>
-            async function getDataset(){
-                const res = await fetch('/Hotel-Management-System/Final_Project_part1/Admin/getData.php')
-                const dataset = await res.json()
-
-                const ctx = document.getElementById('myChart');
-                const months = dataset.months.map(month => {
-                    const date = new Date()
-                    date.setMonth(Number(month) - 1)
-
-                    return date.toLocaleString('en-US', {
-                        month: 'long',
-                    })
-                })
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'monthly bookings',
-                            data: dataset.map,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: '# of bookings'
-                                },
-                                grace: '20%',
-                                beginAtZero: true
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'months'
-                                },
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-            
-        </script>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

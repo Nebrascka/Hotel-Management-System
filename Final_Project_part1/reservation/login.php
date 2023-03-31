@@ -73,11 +73,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
                 <label for="exampleInputEmail1">Email</label>
-                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" placeholder="email@domain.com">
+                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" value=<?php echo $email ?> placeholder="email@domain.com">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Password</label>
-                <input type="password" required class="form-control" name="pwd" aria-describedby="emailHelp">
+                <input type="password" required class="form-control" name="pwd" value=<?php echo $pwd ?> aria-describedby="emailHelp">
             </div>                
             <button type="submit" class="btn btn-primary btn-block">Login</button>
             <small>Dont have an account? <a href="./register.php">Sign up</a></small>

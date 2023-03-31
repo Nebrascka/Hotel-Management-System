@@ -1,3 +1,10 @@
+<?php 
+   session_start();
+   if(!isset($_SESSION['HM_uid'])) {
+      header('Location: ./login.php');
+   }
+?>
+
 <?php require_once('../db/db.php') ?>
 <?php
     function getPrice($id) {

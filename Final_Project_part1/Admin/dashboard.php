@@ -52,8 +52,8 @@ if(!isset($_SESSION['email'])) {
             <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
             <a class="btn btn-primary btn-lg" href="./addroom.php" role="button">Add room</a>
         </div>
-        <div class="my-5">
-            <canvas id="myChart" height="480px"></canvas>
+        <div class="my-5" onload="getDataset()">
+            <canvas id="myChart" height="480px" style="border: #000 .7px solid;"></canvas>
         </div>
 
         <script>

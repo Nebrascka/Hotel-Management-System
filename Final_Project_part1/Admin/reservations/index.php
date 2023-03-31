@@ -51,6 +51,15 @@ if(!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="../style.css">
 
     <title>Reservation</title>
+    <style>
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -73,6 +82,22 @@ if(!isset($_SESSION['email'])) {
                 </li>
             </div>
         </div>
+        <script>
+            /* JavaScript */
+            function showSection(sectionId) {
+            // Hide all content sections
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+
+            // Show the selected content section
+            document.getElementById(sectionId).classList.add('active');
+            }
+
+            // Show Section 1 by default
+            document.getElementById('section1').classList.add('active');
+        </script>
     </nav>
     <div class="container">
         <a href="./approved.php" class="btn btn-primary my-3">View approved Applications</a>

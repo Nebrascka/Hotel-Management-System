@@ -34,13 +34,15 @@ $errors = [
    'pwd1' => ""
 ];
 
+
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $dnum = $_POST['dnum'];
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
-    $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+    $pwd = $_POST['pwd'];
     $cpwd = $_POST["cpwd"];
 
     // handle user input errors
@@ -67,6 +69,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
    }
 
    if(!array_filter($errors)) {
+        $pwd = password_hash($pwd, PASSWORD_DEFAULT);
         addUser($fname, $lname, $dnum, $email, $mobile, $pwd);
         header('location: ./login.php');
    }

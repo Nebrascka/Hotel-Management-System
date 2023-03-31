@@ -5,14 +5,18 @@ function login($email, $password) {
 
     $stmt = $pdo->prepare("SELECT * FROM users  WHERE email LIKE :email");
     $stmt->bindValue(':email', $email);
-    $stmt->execute();
 
+    $stmt->execute();
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return [
-        'isLogged' => password_verify($password, $password),
-        'userObject' => $res
-    ];
+    if(!$res) {
+        return false;
+    } else {
+        return [
+            'isLogged' => password_verify($password, $res['password']),
+            'userObject' => $res
+        ];
+    }
 }
 
 $email = "";

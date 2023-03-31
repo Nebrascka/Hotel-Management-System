@@ -16,10 +16,6 @@ function getRes($id){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-if(isset($_SESSION['HM_MPESA_REQ_ID'])) {
-   echo $_SESSION['HM_MPESA_REQ_ID'];
-}
-
 ?>
 
 <!DOCTYPE html>

@@ -13,6 +13,8 @@ if(!isset($_SESSION['email'])) {
 
 <?php
 
+    include_once("../reports.php");
+
     function getRooms() {
         $pdo = establishCONN();
 
@@ -22,6 +24,10 @@ if(!isset($_SESSION['email'])) {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    }
+
+    if($_SERVER["REQUEST_METHOD"] === "POST") {
+        genReport(getRooms(), "rooms");
     }
 
 ?>
@@ -62,8 +68,13 @@ if(!isset($_SESSION['email'])) {
         </div>
     </nav>
     <div class="container">
-         <a href="../rooms/addroom.php" class="btn btn-primary my-5">Create new room</a>
-         <button class="btn btn-success" onClick="window.print()">Generate report</button>
+        <div style="display: flex; gap: .4rem; align-items: center;">
+            <a href="../rooms/addroom.php" class="btn btn-primary my-5">Create new room</a>
+            <form method="POST">
+                <button type="submit" class="btn btn-success">Generate report</button>
+            </form>
+
+        </div>
         <table class="table custom-table">
            <thead>
               <tr>

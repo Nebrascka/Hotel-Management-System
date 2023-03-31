@@ -1,0 +1,3 @@
+id,created_by,suite,checkin,checkout,adults,children,totalPrice,roomSelected,isApproved,paymentStatus,description,price,fname,lname
+67,7,7,2023-03-24,2023-03-25,1,0,29000,20,1,1,"Premium Suite",29000,Luigi,Rio
+68,7,5,2023-03-27,2023-04-06,1,8,250000,21,1,1,"Luxury Suite",25000,Luigi,Rio

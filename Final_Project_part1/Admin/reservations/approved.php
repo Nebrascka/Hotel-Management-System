@@ -12,6 +12,7 @@ if(!isset($_SESSION['email'])) {
 
 
 <?php
+include_once("../reports.php");
 
     function getRooms($category, $capacity) {
         $pdo = establishCONN();
@@ -35,6 +36,10 @@ if(!isset($_SESSION['email'])) {
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    if($_SERVER["REQUEST_METHOD"] === "POST") {
+        genReport(getApproved(), "reservations");
     }
 
 ?>
@@ -76,7 +81,9 @@ if(!isset($_SESSION['email'])) {
     </nav>
     <div class="container">
          <h1 class="my-3">Approved Applications</h1>
-        <button class="btn btn-success my-3" onClick="window.print()">Generate report</button>
+         <form method="POST">
+            <button type="submit" class="btn btn-success">Generate report</button>
+         </form>
         <table class="table custom-table my-3">
            <thead>
               <tr>

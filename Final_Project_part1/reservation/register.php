@@ -15,6 +15,23 @@ function addUser($fname, $lname, $id, $email, $mobile, $pwd) {
     $stmt->execute();
 }
 
+// error checking
+$fname = "";
+$lname = "";
+$dnum = "";
+$email = "";
+
+$pwd = "";
+$cpwd = "";
+
+$errors = [
+   'fname' => "",
+   'lname' => "",
+   'email' => "",
+   'pwd' => "",
+   'pwd1' => ""
+];
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
@@ -22,9 +39,38 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
     $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+    $cpwd = $_POST["cpwd"];
 
-    addUser($fname, $lname, $dnum, $email, $mobile, $pwd);
-    header('location: ./login.php');
+    // handle user input errors
+   if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $errors['email'] = "Invalid email address";
+   }
+   if(!preg_match("/^[a-z ,.'-]+$/i", $fname)){
+      $errors['fname'] = "Invalid name entry";
+   }
+   if(!preg_match("/^[a-z ,.'-]+$/i", $lname)){
+      $errors['lname'] = "Invalid name entry";
+   }
+   if(!preg_match("/'^\d+$'", $dnum)){
+      $errors['lname'] = "Invalid name entry";
+   }
+   if(!preg_match("/'^07\d{8}$", $mobile)){
+      $errors['lname'] = "Invalid name entry";
+   }
+   if(!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)){
+      $errors['lname'] = "Invalid name entry";
+   }
+   if(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/', $pwd)) {
+         $errors['pwd'] = "Password must contain 8 or characters, capital letters and special characters";
+   }
+   if($cpwd !== $pwd) {
+         $errors['pwd1'] = "Passwords do not match";
+   }
+
+   if(!array_filter($errors)) {
+        addUser($fname, $lname, $dnum, $email, $mobile, $pwd);
+        header('location: ./login.php');
+   }
 }
 
 
@@ -51,39 +97,46 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">First name</label>
-                        <input type="text" class="form-control" name="fname" aria-describedby="emailHelp" placeholder="John">
+                        <input type="text" required class="form-control" name="fname" aria-describedby="emailHelp" placeholder="John">
+                        <label for="err"><small style="color: red;"><?php echo $errors['fname'] ?></small></label><br>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Last name</label>
-                        <input type="text" class="form-control" name="lname" aria-describedby="emailHelp" placeholder="Doe">
+                        <input type="text" required class="form-control" name="lname" aria-describedby="emailHelp" placeholder="Doe">
+                        <label for="err"><small style="color: red;"><?php echo $errors['lname'] ?></small></label><br>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">ID/Passport number</label>
-                <input type="text" class="form-control" name="dnum" aria-describedby="emailHelp" placeholder="document number">
+                <input type="text" required class="form-control" name="dnum" aria-describedby="emailHelp" placeholder="document number">
+                <label for="err"><small style="color: red;"><?php echo $errors['dnum'] ?></small></label><br>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="email@domain.com">
+                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" placeholder="email@domain.com">
+                <label for="err"><small style="color: red;"><?php echo $errors['email'] ?></small></label><br>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Mobile no.</label>
-                <input type="tel" class="form-control" name="mobile" aria-describedby="emailHelp" placeholder="07xxxxxxxx">
+                <input type="tel" required class="form-control" name="mobile" aria-describedby="emailHelp" placeholder="07xxxxxxxx">
+                <label for="err"><small style="color: red;"><?php echo $errors['mobile'] ?></small></label><br>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Password</label>
-                        <input type="password" class="form-control" name="pwd" aria-describedby="emailHelp">
+                        <input required type="password" class="form-control" name="pwd" aria-describedby="emailHelp">
+                        <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Confirm password</label>
-                        <input type="password" class="form-control" name="cpwd" aria-describedby="emailHelp">
+                        <input required type="password" class="form-control" name="cpwd" aria-describedby="emailHelp">
+                        <label for="err"><small style="color: red;"><?php echo $errors['pwd1'] ?></small></label><br>
                     </div>
                 </div>
             </div>

@@ -9,36 +9,46 @@ function login($email, $password) {
 
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $h_pwd = $res['password'];
-
     return [
-        'isLogged' => password_verify($password, $h_pwd),
+        'isLogged' => password_verify($password, $password),
         'userObject' => $res
     ];
 }
+
+$email = "";
+$pwd = "";
+
+$errors = array(
+   'pwd' => ''
+);
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $pwd = $_POST['pwd'];
 
     $loged = login($email, $pwd);
-    if($loged['isLogged']) {
-        session_start();
-        $_SESSION['HM_uid'] = $loged['userObject']['id'];
-        $_SESSION['HM_uemail'] = $loged['userObject']['email'];
-        $_SESSION['HM_ufname'] = $loged['userObject']['fname'];
-        $_SESSION['HM_ulname'] = $loged['userObject']['lname'];
+    if($loged) {
+        if($loged['isLogged']) {
+            session_start();
+            $_SESSION['HM_uid'] = $loged['userObject']['id'];
+            $_SESSION['HM_uemail'] = $loged['userObject']['email'];
+            $_SESSION['HM_ufname'] = $loged['userObject']['fname'];
+            $_SESSION['HM_ulname'] = $loged['userObject']['lname'];
 
-        $id = $_SESSION["HM_uid"];
+            $id = $_SESSION["HM_uid"];
 
-        if(isset($_SESSION["HM_next"])) {
-            header('Location: '.$_SESSION["HM_next"]);
+            if(isset($_SESSION["HM_next"])) {
+                header('Location: '.$_SESSION["HM_next"]);
+            } else {
+                header('Location: dashboard.php?uid='.$id);
+            }
         } else {
-            header('Location: dashboard.php?uid='.$id);
-        }
-    }
+            $errors['pwd'] = 'Invalid Log in. Check email/password';
+        }  
+    } else {
+        $errors['pwd'] = 'Invalid Log in. Check email/password';
+    }  
 }
-
 
 
 ?>
@@ -61,12 +71,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 style="text-align: center">Login</h1>
             <hr>
             <div class="form-group">
+                <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
                 <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="email@domain.com">
+                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" placeholder="email@domain.com">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Password</label>
-                <input type="password" class="form-control" name="pwd" aria-describedby="emailHelp">
+                <input type="password" required class="form-control" name="pwd" aria-describedby="emailHelp">
             </div>                
             <button type="submit" class="btn btn-primary btn-block">Login</button>
             <small>Dont have an account? <a href="./register.php">Sign up</a></small>

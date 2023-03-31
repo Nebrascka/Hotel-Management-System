@@ -96,45 +96,45 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">First name</label>
-                        <input type="text" required class="form-control" name="fname" aria-describedby="emailHelp" placeholder="John" value=<?php echo $fname ?>>
+                        <input type="text" required class="form-control" name="fname" aria-describedby="emailHelp" placeholder="John" value="<?php echo $fname ?>">
                         <small style="color: red;"><?php echo $errors['fname'] ?></small>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Last name</label>
-                        <input type="text" required class="form-control" name="lname" aria-describedby="emailHelp" value=<?php echo $lname ?> placeholder="Doe">
+                        <input type="text" required class="form-control" name="lname" aria-describedby="emailHelp" value="<?php echo $lname ?>" placeholder="Doe">
                         <small style="color: red;"><?php echo $errors['lname'] ?></small>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">ID/Passport number</label>
-                <input type="text" required class="form-control" name="dnum" aria-describedby="emailHelp" value=<?php echo $dnum ?> placeholder="document number">
+                <input type="text" required class="form-control" name="dnum" aria-describedby="emailHelp" value="<?php echo $dnum ?>" placeholder="document number">
                 <small style="color: red;"><?php echo $errors['dnum'] ?></small>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
-                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" value=<?php echo $email ?> placeholder="email@domain.com">
+                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" value="<?php echo $email ?>" placeholder="email@domain.com">
                 <small style="color: red;"><?php echo $errors['email'] ?></small>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Mobile no.</label>
-                <input type="tel" required class="form-control" name="mobile" aria-describedby="emailHelp" value=<?php echo $mobile ?> placeholder="07xxxxxxxx">
+                <input type="tel" required class="form-control" name="mobile" aria-describedby="emailHelp" value="<?php echo $mobile ?>" placeholder="07xxxxxxxx">
                 <small style="color: red;"><?php echo $errors['mobile'] ?></small>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Password</label>
-                        <input required type="password" class="form-control" name="pwd" value=<?php echo $pwd ?> aria-describedby="emailHelp">
+                        <input required type="password" class="form-control" name="pwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
                         <small style="color: red;"><?php echo $errors['pwd'] ?></small>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Confirm password</label>
-                        <input required type="password" class="form-control" name="cpwd" value=<?php echo $cpwd ?> aria-describedby="emailHelp">
+                        <input required type="password" class="form-control" name="cpwd" value="<?php echo $cpwd ?>" aria-describedby="emailHelp">
                         <small style="color: red;"><?php echo $errors['pwd1'] ?></small>
                     </div>
                 </div>

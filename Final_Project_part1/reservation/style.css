@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Karla:wght@300;400;600&family=Poppins:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;600;700;800;900&display=swap');
 /* ################################ */
 /*       reservation page           */
 /* ################################ */
@@ -11,7 +11,8 @@ a:hover{
     text-decoration: none;
 }
 body {
-    font-family: 'Karla', sans-serif;
+    font-family: 'Roboto Slab', serif;
+    font-size: smaller;
 }
 .header {
     background-image: url('../image/reserve-bg.jpg');
@@ -31,10 +32,10 @@ body {
     align-items:end;
     background-color: #fff;
     padding: .6rem;
-    border-radius: 3px;
 }
 .btn{
     height: 2.4rem;
+    border-radius: 0 !important;
 }
 
 .rooms{
@@ -63,7 +64,6 @@ body {
 .room {
     background-color: #fff;
     padding: .6rem;
-    border-radius: 5px;
 }
 .room-ill {
     height: 14rem;

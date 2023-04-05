@@ -70,6 +70,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
   <body>
     <section class="header">
         <form class="add-form" method="POST" enctype="multipart/form-data">
+        <a href="./dashboard.php" class="btn btn-primary" style="color: fff; font-weight: bold;">🐱‍👤 Go to dashboard</a>
             <div class="form-cont">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Category:</label>

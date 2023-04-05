@@ -19,7 +19,9 @@ li {
 a {
   text-decoration: none;
 }
-
+.btn {
+  border-radius: none !important;
+}
 .container {
   max-width: 80%;
   margin: auto;

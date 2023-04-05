@@ -80,8 +80,7 @@ include_once("../reports.php");
         </div>
     </nav>
     <div class="container">
-         <h1 class="my-3">Approved Applications</h1>
-         <form method="POST">
+         <form method="POST" class="my-3">
             <button type="submit" class="btn btn-success">Generate report</button>
          </form>
         <table class="table custom-table my-3">
@@ -98,7 +97,6 @@ include_once("../reports.php");
                  <th scope="col">Occupants</th>
                  <th scope="col">Stay in period</th>
                  <th scope="col">Price</th>
-                 <th scope="col">Approval</th>
                  <th scope="col">Payment status</th>
               </tr>
            </thead>
@@ -128,7 +126,6 @@ include_once("../reports.php");
                     <?php echo $numberOfNights ?> Nights
                  </td>
                  <td>Kshs <?php echo $total ?></td>
-                 <td><?php if($r["isApproved"]) {echo "Approved";} else {echo "Received";} ?></td>
                  <td style="font-weight: bolder;"><?php if($r["paymentStatus"]) {echo "Paid";} else {echo "Pending";} ?></td>
               </tr>
               <tr class="spacer"><td colspan="100"></td></tr>

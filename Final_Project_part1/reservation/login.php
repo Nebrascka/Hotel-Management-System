@@ -72,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
   </head>
   <body>
         <form class="add-form" method="POST" enctype="multipart/form-data" style="max-width: 468px; margin: 0 auto;">
-            <h1 style="text-align: center">Login</h1>
+            <h3 style="text-align: center">Login</h3>
             <hr>
             <div class="form-group">
                 <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>

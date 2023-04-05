@@ -31,10 +31,10 @@ if(!isset($_SESSION['email'])) {
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Month', 'Approved', 'Unapproved'],
-          ['Jan',  1,      5],
-          ['Feb',  0,      8],
-          ['Mar',  3,       4],
-          ['Apr',  2,      6]
+          ['Jan',  1,  5],
+          ['Feb',  0,  8],
+          ['Mar',  3,  4],
+          ['Apr',  2,  6]
         ]);
 
         var options = {
@@ -88,6 +88,9 @@ if(!isset($_SESSION['email'])) {
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./reservations/">Reservations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./businessinteligence/">Business Inteligence</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./logout.php">Log out</a>

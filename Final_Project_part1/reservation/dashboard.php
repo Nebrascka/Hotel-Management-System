@@ -63,7 +63,15 @@ function getRes($id){
             </nav>
             <div class="jumbotron section" id="jumbotron">
                <h1>Hello, <?php echo $_SESSION["HM_ufname"] ?></h1>
-               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta possimus deserunt est blanditiis ipsam accusamus eius nemo perferendis molestiae mollitia?</p>
+               <p>Here is how to Process your Reservation Payment</p>
+               <ol>
+                  <li>Navigate to Bookings</li>
+                  <li>Click on checkout.</li>
+                  <li>Enter mobile number to receive payment.</li>
+                  <li>Wait for STK Prompt on your phone.</li>
+                  <li>Wait for MPESA Message</li>
+                  <li>Go to Bookings and click on Confirm Payment.</li>
+               </ol>
                <hr>
                <a href="./index.php" class="btn btn-primary">Create reservation</a>
             </div>

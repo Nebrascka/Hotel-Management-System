@@ -58,11 +58,17 @@ function addRefNo($ref, $id) {
 }
 
 $email_body = "";
-$uid = $_GET["uid"];
-$recepient_email = $_GET["addr"];
-$recepient_name = $_GET["name"];
-$price = $_GET["price"];
 $room_no = "";
+$uid = "";
+$recepient_email = $_GET["addr"];
+$recepient_name = "";
+$price = "";
+
+if(isset($_GET["uid"])){
+    $uid = $_GET["uid"];
+    $recepient_name = $_GET["name"];
+    $price = $_GET["price"];
+}
 
 if($_SERVER["REQUEST_METHOD"] == "GET") {
     if($_GET["type"] === "verification") {
@@ -71,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h4>MIRTH BOOKING | Verify your email addres.</h4><br>
-                    <a style=\"padding: 7px 20px; border-radius: background-color: blue; color: white;\" href=\"https://13df-41-80-114-241.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://13df-41-80-114-241.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
                 </body>
             </html>
         ";
@@ -83,11 +89,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
         $applId = $_GET["applId"];
 
         $email_body = "
+            Thank you for Choosing Mirth Hotel. Karibu for a good time.
             <html>
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h1>MIRTH BOOKING | Payment</h1>
-                    <p>Payment received successfuly. Thank you for Using Mirth Hotel.</p> <p>Karibu for a good time.</p><br>
+                    <p>Payment received successfuly. Payment reference:<span style=\"font-size: 24px;\" >".$ref_no."</span> </p><br>
                     <table style=\"width: 100%;\">
                     <tr>
                         <th>Applicant:</th>
@@ -107,7 +114,18 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
         ";
 
         addRefNo($ref_no, $applId);
-        sendEmail($recepient_name, $recepient_email, "Ticket Invoice", $email_body);
+        sendEmail($recepient_name, $recepient_email, "Payment Confirmation", $email_body);
+    } elseif($_GET["type"] === "reset") {
+        $email_body = "
+            <html>
+                <head></head>
+                <body style=\"padding: 24px; text-align: center; background-color: white;\">
+                    <h4>MIRTH BOOKING | Password reset addres.</h4><br>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://13df-41-80-114-241.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/reset/?email=". $recepient_email . "\">Reset password</a>
+                </body>
+            </html>
+        ";
+
+        sendEmail($recepient_name, $recepient_email, "Password reset", $email_body);
     }
-    header('location: ../reservation/dashboard.php');
 }

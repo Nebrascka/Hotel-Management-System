@@ -38,6 +38,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['HM_uemail'] = $loged['userObject']['email'];
             $_SESSION['HM_ufname'] = $loged['userObject']['fname'];
             $_SESSION['HM_ulname'] = $loged['userObject']['lname'];
+            $_SESSION['HM_ver_status'] = $loged['userObject']['is_verified'];
 
             $id = $_SESSION["HM_uid"];
 

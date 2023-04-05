@@ -10,7 +10,7 @@
 
 function getRes($id){
     $pdo = establishCONN();
-    $stmt = $pdo->prepare("SELECT applications.id, applications.created_by, applications.suite, applications.checkin, applications.checkout, applications.adults, applications.children, applications.totalPrice, applications.isApproved, applications.paymentStatus, categories.description, categories.price, users.fname, users.lname, rooms.name AS rname FROM applications LEFT JOIN categories ON applications.suite = categories.id LEFT JOIN users ON applications.created_by = users.id LEFT JOIN rooms ON applications.roomSelected = roomid WHERE applications.created_by = :id");
+    $stmt = $pdo->prepare("SELECT applications.id, applications.created_by, applications.suite, applications.checkin, applications.checkout, applications.adults, applications.children, applications.roomSelected, applications.totalPrice, applications.isApproved, applications.paymentStatus, categories.description, categories.price, users.fname, users.lname, rooms.name AS rname FROM applications LEFT JOIN categories ON applications.suite = categories.id LEFT JOIN users ON applications.created_by = users.id LEFT JOIN rooms ON applications.roomSelected = roomid WHERE applications.created_by = :id");
     $stmt->bindValue(':id', $id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,6 +61,7 @@ function getRes($id){
                   <p><a href="./logout.php" class="btn btn-secondary">Logout</a></p>
                </div>
             </nav>
+            <?php if($_SESSION["HM_ver_status"]) {?>
             <div class="jumbotron section" id="jumbotron">
                <h1>Hello, <?php echo $_SESSION["HM_ufname"] ?></h1>
                <p>Here is how to Process your Reservation Payment</p>
@@ -130,7 +131,7 @@ function getRes($id){
                            <?php } else { ?>
                               <?php if($r["isApproved"]) { ?>                                 
                                  <?php if(isset($_SESSION['HM_MPESA_REQ_ID'])) {?>
-                                    <a href="./checkout/confirm.php?apl_id=<?php echo $r["id"] ?>" class="btn btn-outline-success">Confirm payment</a>
+                                    <a href="./checkout/confirm.php?apl_id=<?php echo $r["id"] ?>&roomno=<?php echo $r["roomSelected"] ?>&payable=<?php echo $r["totalPrice"] ?>" class="btn btn-outline-success">Confirm payment</a>
                                  <?php } else { ?>
                                     <button type="button" class="btn btn-outline-primary btn-xs" data-toggle="modal" data-target="#myModal">Checkout</button>
                                  <?php } ?>
@@ -178,6 +179,12 @@ function getRes($id){
                   </tbody>
                </table>
             </div>
+            <?php } else {?>
+               <div class="jumbotron">
+                  <h3>Verify email address</h3>
+                  <p>Check the email adress you provided to verify the adress.</p>
+               </div>
+            <?php } ?>
          </div>
       </main>
    </section>

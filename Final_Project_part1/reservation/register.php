@@ -68,10 +68,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
          $errors['pwd1'] = "Passwords do not match";
    }
 
+   function getID($email) {
+      $pdo = establishCONN();
+      $stmt = $pdo->prepare("SELECT users.id from users WHERE users.email = :email");
+      $stmt->bindValue(':email', $email);
+      $stmt->execute();
+      $id = $stmt->fetch(PDO::FETCH_ASSOC)["id"];
+      return $id;
+   }
+   
    if(!array_filter($errors)) {
         $pwd = password_hash($pwd, PASSWORD_DEFAULT);
         addUser($fname, $lname, $dnum, $email, $mobile, $pwd);
-        header('location: ./login.php');
+        $id = getID($email);
+
+        header('location: ../mail/mail.php?type=verification&uid='.$id.'&addr='.$email.'&name='.$fname.''.$lname);
    }
 }
 

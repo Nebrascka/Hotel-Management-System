@@ -41,9 +41,19 @@
 
       $is_paid = json_decode($response)->ResponseDescription === "The service request has been accepted successsfully";
       if($is_paid) {
-         changePaymentStatus($_GET["apl_id"]);
+         $id = $_SESSION['HM_uid'];
+         $price = $_GET["payable"];
+         $fname = $_SESSION['HM_ufname'];
+         $lname = $_SESSION['HM_ulname'];
+         $email = $_SESSION['HM_uemail'];
+         $roomno = $_GET["roomno"];
+         $applId = $_GET["apl_id"];
+
+         changePaymentStatus($applId);
+         
+
+         header('location: ../../mail/mail.php?type=ticket&uid='.$id.'&addr='.$email.'&name='.$fname.' '.$lname.'&price='.$price.'&roomno='.$roomno.'&applId='.$applId);
       }
       //echo $response;
-      header('Location: ../dashboard.php');
       //"ResponseDescription":"The service request has been accepted successsfully"
    }

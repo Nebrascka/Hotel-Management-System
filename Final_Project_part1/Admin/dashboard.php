@@ -55,7 +55,7 @@ if(!isset($_SESSION['email'])) {
         <div class="jumbotron my-5">
             <h2 class="display-4">Hello Admin</h2>
             <p>Start by checking in guests.</p>
-            <form action="./bookings/index.php" method="POST">
+            <form action="./bookings/index.php" method="POST" style="width: 60%;">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Enter reference number" name="refno">
                 <div class="input-group-append">

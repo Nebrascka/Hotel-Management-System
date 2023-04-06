@@ -89,18 +89,18 @@ if(!isset($_SESSION['email'])) {
 
       function drawChart() {
          var data = google.visualization.arrayToDataTable([
-            ['City', '2010 Population', '2000 Population'],
-            ['New York City, NY', 8175000, 8008000],
-            ['Los Angeles, CA', 3792000, 3694000],
-            ['Chicago, IL', 2695000, 2896000],
-            ['Houston, TX', 2099000, 1953000],
-            ['Philadelphia, PA', 1526000, 1517000]
+            ['Months', 'Earnings'],
+            ['Jan', 800800],
+            ['Feb',  1517000],
+            ['Mar',  2896000],
+            ['Apr',  1953000],
+            ['Dec',  3694000]
          ]);
 
          var materialOptions = {
             chart: {
-               title: 'Population of Largest U.S. Cities',
-               subtitle: 'Based on most recent and previous census data'
+               title: 'MIRTH BOOKING Earning',
+               subtitle: '2022 - 2023 Financial year earning'
             },
             hAxis: {
                title: 'Total Population'
@@ -115,7 +115,7 @@ if(!isset($_SESSION['email'])) {
             },
             axes: {
                x: {
-                  2010: {label: '2010 Population (in millions)', side: 'top'},
+                  2010: {label: 'Total earning (in millions)', side: 'top'},
                   2000: {label: '2000 Population'}
                }
             }
@@ -130,22 +130,28 @@ if(!isset($_SESSION['email'])) {
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Month', 'Total sales'],
-          ['Jan', 109000],
-          ['Feb', 123222],
-          ['Mar',  250000],
-          ['Apr', 101000]
+          ['Month', 'Luxury suite', 'Family suite', 'Premium suite'],
+          ['Jan', 13, 5, 1],
+          ['Feb', 9, 15, 3],
+          ['Mar',  23, 20, 3],
+          ['Apr', 18, 20, 5],
+          ['Dec', 26, 28, 8]
         ]);
 
-        var options = {
-          title: 'Earnings',
-          curveType: 'line',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
+        var materialOptions = {
+            chart: {
+               title: 'MIRTH BOOKING Reservations',
+               subtitle: 'Number of booking per suite'
+            },
+            hAxis: {
+               title: 'Reservations'
+            },
+            vAxis: {
+               title: 'Number of reservations'
+            }
+         };
+         var materialChart = new google.charts.Bar(document.getElementById('curve_chart'));
+         materialChart.draw(data, materialOptions);
       }
     </script> 
   </head>
@@ -180,8 +186,8 @@ if(!isset($_SESSION['email'])) {
     </nav>
     <div class="container">
         <div class="my-5" onload="getDataset()" style="display: flex; gap: 1rem;" >
-            <div id="curve_chart" style="width: 800px; height: 200px"></div>
-            <div id="sales_chart" style="width: 800px; height: 400px"></div>
+            <div id="curve_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 400px"></div>
+            <div id="sales_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 400px"></div>
         </div>
     </div>
 

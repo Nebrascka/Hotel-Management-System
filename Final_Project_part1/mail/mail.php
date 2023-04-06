@@ -77,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h4>MIRTH BOOKING | Verify your email addres.</h4><br>
-                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://13df-41-80-114-241.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://c40e-41-80-114-241.in.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
                 </body>
             </html>
         ";
@@ -121,7 +121,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h4>MIRTH BOOKING | Password reset addres.</h4><br>
-                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://13df-41-80-114-241.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/reset/?email=". $recepient_email . "\">Reset password</a>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://c40e-41-80-114-241.in.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/reset/?email=". $recepient_email . "\">Reset password</a>
                 </body>
             </html>
         ";

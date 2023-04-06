@@ -115,7 +115,8 @@ include_once("../reports.php");
         </div>
     </nav>
     <div class="container my-4">
-      <form  method="POST" class="mb-4">
+      <h3>CHeck in guests</h3><hr>
+      <form  method="POST" class="mb-4" style="width: 60%;">
          <?php if($response_text) { ?>
             <?php if($is_positive){  ?>
                <div class="alert alert-success alert-dismissible fade show" role="alert">

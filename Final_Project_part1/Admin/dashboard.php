@@ -21,62 +21,12 @@ if(!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <title>Reservation</title>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Month', 'Approved', 'Unapproved'],
-          ['Jan',  1,  5],
-          ['Feb',  0,  8],
-          ['Mar',  3,  4],
-          ['Apr',  2,  6]
-        ]);
-
-        var options = {
-          title: 'Rate of Booking',
-          curveType: 'line',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
-      }
-    </script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Month', 'Total sales'],
-          ['Jan', 109000],
-          ['Feb', 123222],
-          ['Mar',  250000],
-          ['Apr', 101000]
-        ]);
-
-        var options = {
-          title: 'Earnings',
-          curveType: 'line',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('sales_chart'));
-
-        chart.draw(data, options);
-      }
-    </script>
+    <title>Admon Dashboard</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Dashboard</a>
+            <a class="navbar-brand" href="./dashboard.php">Dashboard</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -85,6 +35,9 @@ if(!isset($_SESSION['email'])) {
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="./rooms/">Rooms <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./bookings/">Check in guest</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./reservations/">Reservations</a>
@@ -100,14 +53,17 @@ if(!isset($_SESSION['email'])) {
     </nav>
     <div class="container">
         <div class="jumbotron my-5">
-            <h1 class="display-4">Dashboard</h1>
-            <hr class="my-4">
-            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-            <a class="btn btn-primary btn-lg" href="./addroom.php" role="button">Add room</a>
-        </div>
-        <div class="my-5" onload="getDataset()" style="display: flex; gap: 1rem;" >
-            <div id="curve_chart" style="width: 600px; height: 200px"></div>
-            <div id="sales_chart" style="width: 600px; height: 200px"></div>
+            <h2 class="display-4">Hello Admin</h2>
+            <p>Start by checking in guests.</p>
+            <form action="./bookings/index.php" method="POST">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter reference number" name="refno">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary">Checkin guest</button>
+                </div>
+              </div>
+            </form><hr>
+            or you can <a style="text-decoration: solid !important;" href="./rooms/addroom.php" role="button">add a new room</a>
         </div>
     </div>
 

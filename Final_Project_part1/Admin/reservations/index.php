@@ -64,7 +64,7 @@ if(!isset($_SESSION['email'])) {
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Dashboard</a>
+            <a class="navbar-brand" href="../dashboard.php">Dashboard</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -75,11 +75,18 @@ if(!isset($_SESSION['email'])) {
                     <a class="nav-link" href="../rooms/">Rooms <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="../bookings/" class="active">Check in guest</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="./index.php" class="active">Reservations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../businessinteligence/" class="active">Business inteligence</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../logout.php">Log out</a>
                 </li>
+                </ul>
             </div>
         </div>
         <script>

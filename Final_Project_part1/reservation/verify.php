@@ -15,7 +15,10 @@ function verifyUser($id) {
 if($_SERVER["REQUEST_METHOD"] =="GET") {
    $uid = $_GET['uid'];
    if(verifyUser($uid)) {
+
+      $_SESSION['HM_ver_status'] = true;
       header('location: ./dashboard.php');
+
    } else {
       echo "An error occured. Try again later.";
    }

@@ -1,10 +1,12 @@
 <?php require_once('../../db/db.php') ?>
 <?php
-function checkRef($ref) {
+session_start();
+
+function checkEmail($email) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("SELECT * FROM password_reset  WHERE password_reset.request_reference LIKE :ref");
-    $stmt->bindValue(':ref', $ref);
+    $stmt = $pdo->prepare("SELECT * FROM users  WHERE email LIKE :email");
+    $stmt->bindValue(':email', $email);
 
     $stmt->execute();
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -15,13 +17,12 @@ function checkRef($ref) {
         return $res;
     }
 }
-
-function updatePassword($email, $pass) {
+function updatePassword($id, $pass) {
     $pdo = establishCONN();
 
-    $stmt = $pdo->prepare("UPDATE users SET users.password = :pass WHERE users.email = :email");
-    $stmt->bindValue(':pass', password_hash($pass, PASSWORD_DEFAULT));
-    $stmt->bindValue(':email', $email);
+    $stmt = $pdo->prepare("UPDATE users SET users.password = :pass WHERE users.id = :id");
+    $stmt->bindValue(':pass', $pass);
+    $stmt->bindValue(':id', $id);
 
     $stmt->execute();
 }
@@ -33,18 +34,23 @@ $errors = array(
 );
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-   $email = $_GET['email'];
-   $ref = $_GET['ref'];
-   $pwd = $_POST['pwd'];
+   $email = $_SESSION['HM_uemail'];
+   $old_pwd = $_POST['oldpwd'];
+   $new_pwd = $_POST['newpwd'];
 
-   $ref_obj = checkRef($ref);
+   $user_obj = checkEmail($email);
+   if(!$user_obj) {
+      $errors["pwd"] = "Email not found.";
+   } elseif(password_verify($old_pwd, $user_obj["password"])) {
 
-   if(!$ref_obj) {
-      $errors["pwd"] = "Request unsuccesful. Invalid request.";
+      $save_pwd = password_hash($new_pwd, PASSWORD_DEFAULT);
+      $id = $user_obj["id"];
+
+      updatePassword($id, $save_pwd);
+      header('location: ../login.php');
    } else {
-      updatePassword($email, $pwd);
-      header('location: ../login.php');   
-   } 
+      $errors["pwd"] = "Password not found.";
+   }
 }
 
 
@@ -65,12 +71,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
   </head>
   <body>
         <form class="add-form" method="POST" style="max-width: 468px; margin: 0 auto;">
-            <h3 style="text-align: center">Password reset</h3>
+            <h3 style="text-align: center">Change password</h3>
             <hr>
-            <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>               
+            <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
             <div class="form-group">
-               <label for="exampleInputEmail1">New Password</label>
-               <input type="password" required class="form-control" name="pwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
+                <label for="exampleInputEmail1">Old Password</label>
+                <input type="password" required class="form-control" name="oldpwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
+            </div>                
+            <div class="form-group">
+                <label for="exampleInputEmail1">New Password</label>
+                <input type="password" required class="form-control" name="newpwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
             </div>                
             <button type="submit" class="btn btn-primary btn-block">Reset password</button>
         </form>

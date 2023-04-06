@@ -88,7 +88,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
                      <input type="text" class="form-control input-sm" value="<?php echo $_SESSION['HM_ulname'] ?>" name="lname" required>
                   </div>
                   <button type="submit" class="btn btn-outline-primary">Update profile</button><br>
-                  <br><a href="./reset/request.php">Change password</a>
+                  <br><a href="./reset/changePassword.php">Change password</a>
                </form>
             <?php } else {?>
                <div class="jumbotron">

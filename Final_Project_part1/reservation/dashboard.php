@@ -61,7 +61,7 @@ function getRes($id){
                   <p><a href="./logout.php" class="btn btn-secondary">Logout</a></p>
                </div>
             </nav>
-            <?php if($_SESSION["HM_ver_status"]) {?>
+            <?php if($_SESSION["HM_ver_status"] == true) {?>
             <div class="jumbotron section" id="jumbotron">
                <h1>Hello, <?php echo $_SESSION["HM_ufname"] ?></h1>
                <p>Here is how to Process your Reservation Payment</p>

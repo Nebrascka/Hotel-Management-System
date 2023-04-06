@@ -17,14 +17,14 @@ function sendEmail($recepient_name, $recepient_email, $subject, $body) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'mirthhotels';
-        $mail->Password = 'wspanlsqxxuwngns';
+        $mail->Username = 'mirthbooking';
+        $mail->Password = 'aicjpuuwhxlhbplp';
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
         $mail->isHTML(true);
 
         // Set up email content
-        $mail->setFrom('mirthhotels@gmail.com', 'MIRTH BOOKING');
+        $mail->setFrom('mirthbooking@gmail.com', 'MIRTH BOOKING');
         $mail->addAddress($recepient_email, $recepient_name);
         $mail->Subject = $subject;
         $mail->Body = $body;
@@ -57,6 +57,18 @@ function addRefNo($ref, $id) {
     $stmt->execute();
 }
 
+function addResetRefNo($email, $ref) {
+    $pdo = establishCONN();
+
+    $stmt = $pdo->prepare("INSERT INTO password_reset (request_email, request_reference) VALUES (:email, :ref)");
+    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':ref', $ref);
+
+    $stmt->execute();
+}
+
+
+
 $email_body = "";
 $room_no = "";
 $uid = "";
@@ -67,6 +79,10 @@ $price = "";
 if(isset($_GET["uid"])){
     $uid = $_GET["uid"];
     $recepient_name = $_GET["name"];
+    
+}
+
+if(isset($_GET["price"])) {
     $price = $_GET["price"];
 }
 
@@ -77,12 +93,13 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h4>MIRTH BOOKING | Verify your email addres.</h4><br>
-                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://c40e-41-80-114-241.in.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://8005-41-80-114-224.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/verify.php?uid=". $uid . "\">Verify Email</a>
                 </body>
             </html>
         ";
 
         sendEmail($recepient_name, $recepient_email, "Email Verification", $email_body);
+        header('location:../reservation/dashboard.php');
     }elseif($_GET["type"] === "ticket") {
         $room_no = $_GET["roomno"];
         $ref_no = generateRandomString();
@@ -115,17 +132,25 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
 
         addRefNo($ref_no, $applId);
         sendEmail($recepient_name, $recepient_email, "Payment Confirmation", $email_body);
+        header('location:../reservation/dashboard.php');
+
     } elseif($_GET["type"] === "reset") {
+
+        $ref_no = generateRandomString();
+        $email = $_GET["addr"];
+
         $email_body = "
             <html>
                 <head></head>
                 <body style=\"padding: 24px; text-align: center; background-color: white;\">
                     <h4>MIRTH BOOKING | Password reset addres.</h4><br>
-                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://c40e-41-80-114-241.in.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/reset/?email=". $recepient_email . "\">Reset password</a>
+                    <a style=\"padding: 9px 28px; background-color: blue; color: white;\" href=\"https://8005-41-80-114-224.eu.ngrok.io/Hotel-Management-System/Final_Project_part1/reservation/reset/?ref=". $ref_no . "&email=". $recepient_email . "\">Reset password</a>
                 </body>
             </html>
         ";
 
+        addResetRefNo($email, $ref_no);
         sendEmail($recepient_name, $recepient_email, "Password reset", $email_body);
+        header('location:../reservation/dashboard.php');
     }
 }

@@ -17,14 +17,14 @@ function sendEmail($recepient_name, $recepient_email, $subject, $body) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'Conradadams24';
-        $mail->Password = 'ctoentqabzdhcwpg';
+        $mail->Username = 'mirthhotels';
+        $mail->Password = 'wspanlsqxxuwngns';
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
         $mail->isHTML(true);
 
         // Set up email content
-        $mail->setFrom('Conradadams24@gmail.com', 'MIRTH BOOKING');
+        $mail->setFrom('mirthhotels@gmail.com', 'MIRTH BOOKING');
         $mail->addAddress($recepient_email, $recepient_name);
         $mail->Subject = $subject;
         $mail->Body = $body;

@@ -57,7 +57,7 @@ function getRes($id){
          <div class="main-content">
             <nav class="dash-nav">
                <div class="dash-nav-right">
-                  <p class="textt-lg"><b>Welcome <a href="#"><?php echo $_SESSION["HM_ufname"] ?></a></b></p>
+                  <p class="textt-lg"><b>Welcome <a href="./profile.php"><?php echo $_SESSION["HM_ufname"] ?></a></b></p>
                   <p><a href="./logout.php" class="btn btn-secondary">Logout</a></p>
                </div>
             </nav>

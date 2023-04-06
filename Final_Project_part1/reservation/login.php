@@ -72,22 +72,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>login</title>
   </head>
   <body>
+    <div class="form-container-det" id="login">
         <form class="add-form" method="POST" enctype="multipart/form-data" style="max-width: 468px; margin: 0 auto;">
-            <h3 style="text-align: center">Login</h3>
-            <hr>
-            <div class="form-group">
-                <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
-                <label for="exampleInputEmail1">Email</label>
-                <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" value="<?php echo $email ?>" placeholder="email@domain.com">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Password</label>
-                <input type="password" required class="form-control" name="pwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
-            </div>                
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-            <small>Dont have an account? <a href="./register.php">Sign up</a></small> |
-            <small><a href="./reset/request.php">Forgot Password</a></small>
-        </form>
+                <h3 style="text-align: center">Login</h3>
+                <div class="form-group">
+                    <label for="err"><small style="color: red;"><?php echo $errors['pwd'] ?></small></label><br>
+                    <label for="exampleInputEmail1">Email</label>
+                    <input type="email" required class="form-control" name="email" aria-describedby="emailHelp" value="<?php echo $email ?>" placeholder="email@domain.com">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Password</label>
+                    <input type="password" required class="form-control" name="pwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
+                </div>                
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <small>Dont have an account? <a href="./register.php">Sign up</a></small> |
+                <small><a href="./reset/request.php">Forgot Password</a></small>
+            </form>
+        </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
   </body>

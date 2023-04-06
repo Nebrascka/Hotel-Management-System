@@ -24,14 +24,30 @@ body {
 .header form {
     display: grid;
     place-items: center;
-    height: 30vh;
+    max-width: 1064px;
+    margin: 0 auto;
 }
 .form-cont {
     display: flex;
+    flex-direction: column;
     gap: .6rem;
-    align-items:end;
     background-color: #fff;
     padding: .6rem;
+    width: 100%;
+}
+.btn1 {
+    background: #C1B086;
+    color: white;
+    text-align: center;
+    border-radius: 50px;
+    padding: 8px 22px;
+}
+
+@media (min-width: 948px) {
+    .form-cont {
+        flex-direction: row;
+        align-items: end;
+    }
 }
 .btn{
     height: 2.4rem;
@@ -51,7 +67,7 @@ body {
 }
 .rooms-cont {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
     gap: 1rem;
     max-width: 1148px;
     margin: 0 auto;
@@ -75,6 +91,22 @@ body {
 .name {
     font-size: larger;
     font-weight: bold;
+}
+
+
+/* login container */
+.form-container-det {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background-image: url("../image/reserve-bg.jpg");
+    background-position: center;
+    background-size: cover;
+}
+.add-form {
+    background-color: #fff;
+    width: 32rem;
+    padding: 1rem;
 }
 
 /* booking */

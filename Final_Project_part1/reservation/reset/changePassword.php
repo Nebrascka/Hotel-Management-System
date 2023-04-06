@@ -1,6 +1,9 @@
 <?php require_once('../../db/db.php') ?>
 <?php
 session_start();
+if(!isset($_SESSION['HM_uid'])) {
+   header('Location: ./login.php');
+}
 
 function checkEmail($email) {
     $pdo = establishCONN();
@@ -82,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="exampleInputEmail1">New Password</label>
                 <input type="password" required class="form-control" name="newpwd" value="<?php echo $pwd ?>" aria-describedby="emailHelp">
             </div>                
-            <button type="submit" class="btn btn-primary btn-block">Reset password</button>
+            <button type="submit" class="btn btn-primary btn-block">Change password</button>
         </form>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>

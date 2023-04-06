@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('../db/db.php');
 
 $login = 0;
@@ -20,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         
          // echo "Login Successful";
         $login = 1;
-        session_start();
+
         $_SESSION['id']=$res[0]['id'];
         $_SESSION['email']=$res[0]['email'];
         header('location: ./dashboard.php');

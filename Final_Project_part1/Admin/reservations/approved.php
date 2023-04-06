@@ -1,16 +1,10 @@
-<?php require_once('../../db/db.php') ?>
-
 <?php
-
 session_start();
 if(!isset($_SESSION['email'])) {
     header('location: ../login.php');
 }
-
 ?>
-
-
-
+<?php require_once('../../db/db.php') ?>
 <?php
 include_once("../reports.php");
 

@@ -1,5 +1,3 @@
-<?php require_once('../../db/db.php') ?>
-
 <?php
 
 session_start();
@@ -8,8 +6,7 @@ if(!isset($_SESSION['email'])) {
 }
 
 ?>
-
-
+<?php require_once('../../db/db.php') ?>
 
 <?php
 

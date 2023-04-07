@@ -45,13 +45,16 @@ if(!isset($_SESSION['email'])) {
 
       function drawChart() {
          query_data().then(data => {
-            data_obj = data.earnings
-            const keys = Object.keys(data_obj); // get all the keys
-            const values = Object.values(data_obj); // get all the values
+            data = data.earnings
+
+            const keys = Object.keys(data);
+            const values = Object.values(data);
 
             const result = keys.map((key, index) => [key, values[index]])
             console.log(result)
-            var data = google.visualization.arrayToDataTable(result);
+            var data = google.visualization.arrayToDataTable([
+               ['Month', 'Earning'], ...result
+            ]);
 
             var materialOptions = {
                chart: {
@@ -60,18 +63,6 @@ if(!isset($_SESSION['email'])) {
                },
                hAxis: {
                   title: 'Monthly earnings'
-               },
-               vAxis: {
-                  title: 'City'
-               },
-               bars: 'horizontal',
-               series: {
-                  0: {axis: '2010'},
-                  1: {axis: '2000'}
-               },
-               axes: {
-                  x: {
-                     2010: {label: 'Total earnings (in Kshs)', side: 'top'}                  }
                }
             };
             var materialChart = new google.charts.Bar(document.getElementById('sales_chart'));

@@ -25,62 +25,18 @@ if(!isset($_SESSION['email'])) {
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-      function getKeysArray(objectsArray) {
-         // Create an empty array to hold the keys
-         var keys = [];
-
-         // Loop through the objects in the array
-         for (var i = 0; i < objectsArray.length; i++) {
-            // Loop through the keys of each object
-            for (var key in objectsArray[i]) {
-               // If the key is not already in the keys array, add it
-               if (!keys.includes(key)) {
-               keys.push(key);
-               }
-            }
-         }
-
-         // Create a new array to hold the result
-         var result = [];
-
-         // Loop through the objects in the array
-         for (var i = 0; i < objectsArray.length; i++) {
-            // Create a new array to hold the values for this object
-            var values = [];
-
-            // Loop through the keys
-            for (var j = 0; j < keys.length; j++) {
-               // If the object has a value for this key, add it to the values array
-               if (keys[j] in objectsArray[i]) {
-               values.push(objectsArray[i][keys[j]]);
-               } else {
-               values.push(null);
-               }
-            }
-
-            // Add the values array to the result array
-            result.push(keys);
-            result.push(values);
-         }
-
-         // Return the result array
-         return result;
-      }
-
       // Get the data from the PHP file using fetch
       const query_data = async () => {
          try {
-            const res = await fetch('query_db.php')
+            const res = await fetch('../getData.php')
             const data = await res.json()
-            const data_arr = getKeysArray(data)
-            console.log(data_arr, data)
 
-            return data_arr
+            return data
          } catch (error) {
             console.error(error)
          }
       }
-      query_data()
+      query_data().then(data => console.log(data))
       
     </script>
     <script type="text/javascript">
@@ -88,40 +44,40 @@ if(!isset($_SESSION['email'])) {
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-         var data = google.visualization.arrayToDataTable([
-            ['Months', 'Earnings'],
-            ['Jan', 800800],
-            ['Feb',  1517000],
-            ['Mar',  2896000],
-            ['Apr',  1953000],
-            ['Dec',  3694000]
-         ]);
+         query_data().then(data => {
+            data_obj = data.earnings
+            const keys = Object.keys(data_obj); // get all the keys
+            const values = Object.values(data_obj); // get all the values
 
-         var materialOptions = {
-            chart: {
-               title: 'MIRTH BOOKING Earning',
-               subtitle: '2022 - 2023 Financial year earning'
-            },
-            hAxis: {
-               title: 'Total Population'
-            },
-            vAxis: {
-               title: 'City'
-            },
-            bars: 'horizontal',
-            series: {
-               0: {axis: '2010'},
-               1: {axis: '2000'}
-            },
-            axes: {
-               x: {
-                  2010: {label: 'Total earning (in millions)', side: 'top'},
-                  2000: {label: '2000 Population'}
+            const result = keys.map((key, index) => [key, values[index]])
+            console.log(result)
+            var data = google.visualization.arrayToDataTable(result);
+
+            var materialOptions = {
+               chart: {
+                  title: 'MIRTH BOOKING Earning',
+                  subtitle: '2022 - 2023 Financial year earning'
+               },
+               hAxis: {
+                  title: 'Monthly earnings'
+               },
+               vAxis: {
+                  title: 'City'
+               },
+               bars: 'horizontal',
+               series: {
+                  0: {axis: '2010'},
+                  1: {axis: '2000'}
+               },
+               axes: {
+                  x: {
+                     2010: {label: 'Total earnings (in Kshs)', side: 'top'}                  }
                }
-            }
-         };
-         var materialChart = new google.charts.Bar(document.getElementById('sales_chart'));
-         materialChart.draw(data, materialOptions);
+            };
+            var materialChart = new google.charts.Bar(document.getElementById('sales_chart'));
+            materialChart.draw(data, materialOptions);
+         })
+         
       }
     </script>
     <script type="text/javascript">
@@ -129,29 +85,54 @@ if(!isset($_SESSION['email'])) {
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Month', 'Luxury suite', 'Family suite', 'Premium suite'],
-          ['Jan', 13, 5, 1],
-          ['Feb', 9, 15, 3],
-          ['Mar',  23, 20, 3],
-          ['Apr', 18, 20, 5],
-          ['Dec', 26, 28, 8]
-        ]);
+         query_data().then(data => {
+            data = data.bookings
+            const months = Object.keys(data["Luxury suite"]);
+            const luxurySuiteData = ["Luxury suite"];
+            const familySuiteData = ["Family suite"];
+            const premiumSuiteData = ["Premium suite"];
 
-        var materialOptions = {
-            chart: {
-               title: 'MIRTH BOOKING Reservations',
-               subtitle: 'Number of booking per suite'
-            },
-            hAxis: {
-               title: 'Reservations'
-            },
-            vAxis: {
-               title: 'Number of reservations'
-            }
-         };
-         var materialChart = new google.charts.Bar(document.getElementById('curve_chart'));
-         materialChart.draw(data, materialOptions);
+            months.forEach(month => {
+               luxurySuiteData.push(data["Luxury suite"][month]);
+               familySuiteData.push(data["Family suite"][month]);
+               premiumSuiteData.push(data["Premium suite"][month]);
+            });
+
+            // Get an array of all the months
+            const mon = Object.keys(data["Luxury suite"]);
+
+            // Create an array of arrays, where each sub-array represents a suite
+            const suites = Object.keys(data).map((suiteName) => {
+               const suiteData = data[suiteName];
+               return [suiteName, ...mon.map((month) => suiteData[month])];
+            });
+            
+            console.log(suites)
+
+            var data = google.visualization.arrayToDataTable([
+               ['Suite', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+               suites[0],
+               suites[1],
+               suites[2]
+               
+            ]);
+
+            var materialOptions = {
+               chart: {
+                  title: 'MIRTH BOOKING Reservations',
+                  subtitle: 'Number of booking per suite'
+               },
+               hAxis: {
+                  title: 'Reservations'
+               },
+               vAxis: {
+                  title: 'Number of reservations'
+               }
+            };
+            var materialChart = new google.charts.Bar(document.getElementById('curve_chart'));
+            materialChart.draw(data, materialOptions);
+         })
+         
       }
     </script> 
   </head>
@@ -186,8 +167,8 @@ if(!isset($_SESSION['email'])) {
     </nav>
     <div class="container">
         <div class="my-5" onload="getDataset()" style="display: flex; gap: 1rem;" >
-            <div id="curve_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 400px"></div>
-            <div id="sales_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 400px"></div>
+            <div id="curve_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 500px"></div>
+            <div id="sales_chart" style="width: 800px; border: #000 .7px solid; padding: 16px; height: 500px"></div>
         </div>
     </div>
 

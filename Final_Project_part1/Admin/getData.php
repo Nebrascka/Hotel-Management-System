@@ -65,7 +65,7 @@
             $month_string = $date->format('F');
 
             $total = getEarnings((int)$m,);
-            $dataset["earnings"][$month_string] = $total["total"];
+            $dataset["earnings"][$month_string] = (int)$total["total"];
         }
         
         return $dataset;
